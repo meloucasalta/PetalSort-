@@ -26,8 +26,8 @@ jobs:
 
       - name: Install dependencies & Capacitor
         run: |
-          npm install
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm install --legacy-peer-deps
+          npm install --legacy-peer-deps @capacitor/core @capacitor/cli @capacitor/android
 
       - name: Build Vite web app
         run: npm run build
