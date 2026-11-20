@@ -34,17 +34,15 @@ jobs:
 
       - name: Initialize & sync Android project
         run: |
-          if [ ! -f "capacitor.config.json" ] && [ ! -f "capacitor.config.ts" ]; then
-            cat << 'EOF' > capacitor.config.json
+          cat << 'EOF' > capacitor.config.json
           {
             "appId": "com.meloucasalta.petalsort",
             "appName": "PetalSort",
             "webDir": "dist"
           }
           EOF
-          fi
           if [ ! -d "android" ]; then
-            npx cap add android --app-id "com.meloucasalta.petalsort" --name "PetalSort"
+            npx cap add android
           fi
           npx cap sync android
 
