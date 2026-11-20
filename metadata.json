@@ -1,0 +1,6 @@
+{
+  "name": "PetalSort",
+  "description": "An interactive pink-themed waste sorting guide covering Biodegradable, Non-Biodegradable, and Recyclable materials with item lookup, sorting practice, and decomposition timelines.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
