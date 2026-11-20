@@ -20,17 +20,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Set up Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '21'
-
-      - name: Accept Android SDK licenses
-        run: |
-          yes | sdkmanager --licenses > /dev/null 2>&1 || true
 
       - name: Install dependencies & Capacitor
         run: |
@@ -42,16 +38,19 @@ jobs:
 
       - name: Initialize & sync Android project
         run: |
-          cat << 'EOF' > capacitor.config.json
-          {
-            "appId": "com.meloucasalta.petalsort",
-            "appName": "PetalSort",
-            "webDir": "dist"
-          }
+          rm -f capacitor.config.json
+          cat << 'EOF' > capacitor.config.ts
+          import type { CapacitorConfig } from '@capacitor/cli';
+
+          const config: CapacitorConfig = {
+            appId: 'com.meloucasalta.petalsort',
+            appName: 'PetalSort',
+            webDir: 'dist'
+          };
+
+          export default config;
           EOF
-          if [ ! -d "android" ]; then
-            npx cap add android
-          fi
+          npx cap add android
           npx cap sync android
           mkdir -p android/app/libs android/capacitor-cordova-android-plugins/src/main/libs
 
@@ -59,16 +58,10 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          set -o pipefail
-          ./gradlew assembleDebug 2>&1 | tee gradle.log || {
-            echo "=== ROOT CAUSE SUMMARY ==="
-            grep -E "FAILURE:|Execution failed for task|Caused by:|> " gradle.log | tail -n 30
-            exit 1
-          }
+          ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: PetalSort-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          === ROOT CAUSE SUMMARY ===
