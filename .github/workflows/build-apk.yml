@@ -53,12 +53,13 @@ jobs:
             npx cap add android
           fi
           npx cap sync android
+          mkdir -p android/app/libs android/capacitor-cordova-android-plugins/src/main/libs
 
       - name: Build Debug APK with Gradle
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --continue || (./gradlew assembleDebug --stacktrace --info | grep -iE "error:|exception|could not|failed" -C 3; exit 1)
+          ./gradlew assembleDebug || ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
