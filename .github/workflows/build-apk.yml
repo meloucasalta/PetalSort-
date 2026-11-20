@@ -1,4 +1,3 @@
-
 name: Build Android APK
 
 on:
@@ -59,7 +58,7 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --continue || (./gradlew assembleDebug --stacktrace --info | grep -iE "error:|exception|could not|failed" -C 3; exit 1)
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
